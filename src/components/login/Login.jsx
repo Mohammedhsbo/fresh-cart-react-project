@@ -6,12 +6,14 @@ import { useNavigate } from 'react-router-dom'
 import * as Yup from 'yup'
 import { NavLink } from 'react-router-dom'
 import { usercontext } from '../../context/usercontext'
+import toast from 'react-hot-toast';
 
 
 
 export default function Login() {
    let{ setUserlogin} = React.useContext(usercontext)
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = React.useState(false);
 
  
   const validationSchema = Yup.object().shape({
@@ -31,6 +33,7 @@ export default function Login() {
     },
     validationSchema,
    onSubmit: async (values) => {
+  setIsLoading(true);
   try {
     const { data } = await axios.post(
       "https://ecommerce.routemisr.com/api/v1/auth/signin",
@@ -44,7 +47,9 @@ export default function Login() {
     }
   } catch (error) {
     console.error("Error during login:", error);
-    alert("Invalid email or password. Please try again.");
+    toast.error(error.response?.data?.message || "Invalid email or password. Please try again.");
+  } finally {
+    setIsLoading(false);
   }
 }
   });
@@ -84,8 +89,8 @@ export default function Login() {
           )}
         </Form.Group>
 
-        <button type="submit" className="btn btn-success w-100 mt-3">
-          Login
+        <button type="submit" className="btn btn-success w-100 mt-3" disabled={isLoading}>
+          {isLoading ? <i className="fas fa-spinner fa-spin"></i> : "Login"}
         </button>
         <p className='mt-3'>didn't have an account? <span><NavLink className={`text-decoration-none text-success fw-bold`} to="/register">Register now</NavLink></span></p>
       </Form>

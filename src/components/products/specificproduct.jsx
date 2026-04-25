@@ -1,9 +1,10 @@
-import axios from 'axios';
+import apiClient from '../../lib/api';
 import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Relatedproduct from './Relatedproduct';
 import Slider from "react-slick";
 import { CartContext } from '../../context/Cartcontext';
+import toast from 'react-hot-toast';
 
 export default function Specificproduct() {
     
@@ -20,12 +21,10 @@ export default function Specificproduct() {
 
   async function getproductdetails() {
     try {
-      const { data } = await axios.get(`https://ecommerce.routemisr.com/api/v1/products/${id}`);
-      console.log(data.data);
+      const { data } = await apiClient.get(`/products/${id}`);
       setProduct(data.data);
     } catch (err) {
-      console.log(err);
-      alert(" loading product details");
+      toast.error("Failed loading product details");
     }
   }
 
@@ -50,8 +49,9 @@ export default function Specificproduct() {
             <div className="row align-items-center justify-content-center">
               <div className="col-md-4">
                   <Slider {...settings}>
-                   {product?.images.map((url)=>{
+                   {product?.images.map((url, index)=>{
                     return   <img
+                  key={index}
                   src={url}
                   className="w-100 rounded "
                   alt={product.title}
@@ -72,7 +72,7 @@ export default function Specificproduct() {
                   <i className="fa-solid fa-star text-warning ms-1"></i>
                 </h5>
                   </div>
-                  <button className='mt-4 btn btn-success w-75' onClick={() => addToCart(product.id)}>
+                  <button className='mt-4 btn btn-success w-75' onClick={() => addToCart(product._id)}>
   Add to cart
 </button>
  

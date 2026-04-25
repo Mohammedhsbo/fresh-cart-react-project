@@ -1,11 +1,11 @@
-import axios from 'axios';
+import apiClient from '../lib/api';
 import React from 'react'
 import { useQuery } from '@tanstack/react-query';
 
 export default function Userecent() {
     
   async function getrecent(){
-    let {data}= await axios.get("https://ecommerce.routemisr.com/api/v1/products");
+    let {data}= await apiClient.get("/products");
     // setProducts(data.data);
     return data;
   }
@@ -18,7 +18,6 @@ export default function Userecent() {
     // retryDelay:200,
 }
 )
-console.log("recdata"+response);
 return response
   
   // {isLoading &&  <h2>Loading...</h2>}

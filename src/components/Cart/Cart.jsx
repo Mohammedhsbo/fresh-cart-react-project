@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { CartContext } from '../../context/Cartcontext';
 import { useQuery } from '@tanstack/react-query';
+import { Link } from 'react-router-dom';
 
 export default function Cart() {
   const [cartitems, setcartitems] = useState([]);
@@ -22,11 +23,10 @@ async function updatecarthere(id,count) {
   useEffect(() => {
     if (data) {
       setcartitems(data);
-      console.log("The cart:", data);
     }
   }, [data]);
 
-  if (isError) console.log("Error fetching cart items");
+  if (isError) toast.error("Error fetching cart items");
 
   return (
     <div>
@@ -37,7 +37,7 @@ async function updatecarthere(id,count) {
           <div className="bounce3"></div>
         </div>
       ) : (
-        <div className="table-responsive shadow rounded" style={{width:"1300px"}}>
+        <div className="table-responsive shadow rounded w-100 mx-auto">
   <table className="table table-hover align-middle text-nowrap">
     <thead className="table-light">
       <tr>
@@ -114,6 +114,17 @@ async function updatecarthere(id,count) {
         );
       })}
     </tbody>
+    <tfoot>
+      {cartitems?.data?.products?.length > 0 && (
+        <tr>
+          <td colSpan="3" className="text-start fw-bold fs-5 px-4">Total Price:</td>
+          <td className="fw-bold text-success fs-5">{cartitems?.data?.totalCartPrice} EGP</td>
+          <td>
+            <Link to="/checkout" className="btn btn-success w-100">Proceed to Checkout</Link>
+          </td>
+        </tr>
+      )}
+    </tfoot>
   </table>
 </div>
 

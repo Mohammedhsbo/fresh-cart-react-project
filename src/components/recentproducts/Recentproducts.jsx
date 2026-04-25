@@ -20,22 +20,6 @@ export default function Recentproducts() {
     autoplaySpeed: 1500,
   };
   let {data,isLoading}=Userecent();
-  
-
-//   async function getproducts() {
-//     try {
-//       const {data} = await axios.get("https://ecommerce.routemisr.com/api/v1/products");
-//       console.log(data.data);
-//         setProducts(data.data);
-//     } 
-//     catch (err) {
-//       console.log(err);
-//     }
-//   }
-//  useEffect(() => {
-//     getproducts();
-//  }, []);
- 
 
   return (
     <div className='row w-100 my-5'>
@@ -50,8 +34,9 @@ export default function Recentproducts() {
           <div className='product  m-2 border h-100  px-3 w-100'>
             <Link className='text-decoration-none text-black ' to={`/specificproduct/${product._id}`}>
               <Slider {...settings} >
-                   {product?.images.map((url)=>{
+                   {product?.images.map((url, index)=>{
                     return   <img
+                  key={index}
                   src={url}
                   className="w-100 rounded "
                   alt={product.title}

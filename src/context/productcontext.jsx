@@ -1,20 +1,14 @@
-import axios from "axios";
+import apiClient from "../lib/api";
 import { createContext } from "react";
 
 export const productcontext=createContext();
-export default function CartContextProvider(props)
+export default function ProductContextProvider(props)
 {
 async function getProduct() {
   try {
-    const response = await axios.get(
-      `https://ecommerce.routemisr.com/api/v1/products`,
-      {
-        headers: {
-          token: localStorage.getItem("userToken"),
-        },
-      }
+    const response = await apiClient.get(
+      `/products`
     );
-     console.log("Products fetched", response.data);
     return response.data;
 
   } catch (err) {

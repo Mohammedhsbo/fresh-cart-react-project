@@ -1,4 +1,4 @@
-import axios from 'axios';
+import apiClient from '../lib/api';
 import React, { createContext } from 'react'
 import toast from 'react-hot-toast';
 
@@ -11,10 +11,7 @@ export default function CartContextProvider(props) {
    
      async function getcartitem() {
   try {
-    const response = await axios.get(`https://ecommerce.routemisr.com/api/v1/cart`, {
-      headers: { token: localStorage.getItem('userToken') }
-    });
-    console.log("Cart items fetched", response.data);
+    const response = await apiClient.get(`/cart`);
     return response.data; // <-- لازم ترجع الـ data هنا
   } catch (error) {
     console.error("Error fetching cart items", error);
@@ -24,13 +21,9 @@ export default function CartContextProvider(props) {
    
   async function deletefromcart(id)
   {
-         return await axios.delete(`https://ecommerce.routemisr.com/api/v1/cart/${id}`,{
-    headers:{
-        token:localStorage.getItem('userToken')
-  }})
+         return await apiClient.delete(`/cart/${id}`)
   .then((res)=>
-{   console.log("Product removed from cart",res.data);
-    if(res.data.status==="success")
+{   if(res.data.status==="success")
     {toast.success("Product removed from cart successfully");}
 }).catch((err)=>{
     console.error("Error removing product from cart",err);
@@ -40,13 +33,9 @@ export default function CartContextProvider(props) {
 
 async function updatecart(id,count)
   {
-         return await axios.put(`https://ecommerce.routemisr.com/api/v1/cart/${id}`,{count:count},{
-    headers:{
-        token:localStorage.getItem('userToken')
-  }})
+         return await apiClient.put(`/cart/${id}`,{count:count})
   .then((res)=>
-{   console.log("Product upadte from cart",res.data);
-    if(res.data.status==="success")
+{   if(res.data.status==="success")
     {toast.success("Product updated successfully");}
 }).catch((err)=>{
     console.error("Error updating product in cart",err);
@@ -55,21 +44,19 @@ async function updatecart(id,count)
   }
 
     async function addToCart(id) {
+        if (!localStorage.getItem('userToken')) {
+            toast.error("Please login to add items to cart");
+            return;
+        }
         // منطق إضافة المنتج إلى السلة
-       return await axios.post(`https://ecommerce.routemisr.com/api/v1/cart`,{
+       return await apiClient.post(`/cart`,{
           productId:id
-},{
-    headers:{
-        token:localStorage.getItem('userToken')
-
-    }
 }).then((response)=>{
     if(response.data.status==="success")
     {toast.success("Product added to cart successfully");}
     else{
         toast.error("Failed to add product to cart");
     }
-    console.log("Product added to cart",response.data);
 }).catch((error)=>{
     console.error("Error adding product to cart",error);
 });

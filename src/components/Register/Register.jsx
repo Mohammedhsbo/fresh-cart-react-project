@@ -7,13 +7,16 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { usercontext } from '../../context/usercontext';
+import toast from 'react-hot-toast';
 
 export default function Register() {
   let { setUserlogin } = React.useContext(usercontext);
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = React.useState(false);
 
   // ✅ دالة التسجيل
   async function handleRegister(formvalues) {
+    setIsLoading(true);
     try {
       let { data } = await axios.post(
         'https://ecommerce.routemisr.com/api/v1/auth/signup',
@@ -27,9 +30,10 @@ export default function Register() {
         navigate('/login');
       }
     } catch (error) {
-     console.error('Error during registration:', error.response?.data || error);
-alert(error.response?.data?.message || 'Something went wrong.');
-
+      console.error('Error during registration:', error.response?.data || error);
+      toast.error(error.response?.data?.message || 'Something went wrong.');
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -160,8 +164,8 @@ alert(error.response?.data?.message || 'Something went wrong.');
         </Form.Group>
 
         {/* Submit */}
-        <Button variant="success" type="submit" className="mt-3 w-100">
-          Register Now
+        <Button variant="success" type="submit" className="mt-3 w-100" disabled={isLoading}>
+          {isLoading ? <i className="fas fa-spinner fa-spin"></i> : "Register Now"}
         </Button>
       </Form>
     </div>

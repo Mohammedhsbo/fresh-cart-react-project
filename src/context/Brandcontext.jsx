@@ -1,4 +1,4 @@
-import axios from 'axios';
+import apiClient from '../lib/api';
 import React, { createContext } from 'react'
 
 
@@ -8,12 +8,9 @@ export default function BrandContextProvider(props) {
 
     async function brandsget()
     {
-        return await axios.get(`https://ecommerce.routemisr.com/api/v1/brands`,{
-            headers: { token: localStorage.getItem('userToken') }
-        })
+        return await apiClient.get(`/brands`)
         .then((res)=>
-    {   console.log("Brands fetched",res.data);
-        return res.data;
+    {   return res.data;
     }).catch((err)=>{
         console.error("Error fetching brands",err);
     });
@@ -21,11 +18,8 @@ export default function BrandContextProvider(props) {
 
 async function getspecificbrand(id) {
   try {
-    const res = await axios.get(`https://ecommerce.routemisr.com/api/v1/brands/${id}`, {
-      headers: { token: localStorage.getItem('userToken') },
-    });
+    const res = await apiClient.get(`/brands/${id}`);
 
-    console.log("Brand fetched", res.data.data);
     return res.data.data; // ✅ رجّع البيانات الفعلية فقط
   } catch (err) {
     console.error("Error fetching brand", err);
@@ -34,11 +28,11 @@ async function getspecificbrand(id) {
 }
 
   return (
-    <div>
+    <>
        <BrandContext.Provider value={{ brandsget, getspecificbrand }}>
   {props.children}
 </BrandContext.Provider>
 
-    </div>
+    </>
   )
 }

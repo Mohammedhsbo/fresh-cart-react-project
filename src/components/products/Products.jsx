@@ -31,8 +31,9 @@ const{data,isLoading}=useQuery(
           <div className='product  m-2 border h-100  px-3 w-100'>
             <Link className='text-decoration-none text-black ' to={`/specificproduct/${product._id}`}>
               <Slider {...settings} >
-                   {product?.images.map((url)=>{
+                   {product?.images.map((url, index)=>{
                     return   <img
+                  key={index}
                   src={url}
                   className="w-100 rounded "
                   alt={product.title}

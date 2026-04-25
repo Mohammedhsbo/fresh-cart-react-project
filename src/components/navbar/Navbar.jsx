@@ -4,6 +4,7 @@ import { useNavigate, NavLink } from 'react-router-dom';
 import styles from "./navbar.module.css";
 import { usercontext } from '../../context/usercontext';
 
+
 export default function Navbar() {
   const navigate = useNavigate();
   const { userlogin, setUserlogin } = React.useContext(usercontext);
@@ -19,40 +20,42 @@ export default function Navbar() {
     { name: "Products", path: "/products" },
     { name: "Categories", path: "/categories" },
     { name: "Brands", path: "/brands" },
-    { name: "Cart", path: "/cart" }
   ];
+  
+  if (userlogin) {
+    userLinks.push({ name: "Cart", path: "/cart" });
+    userLinks.push({ name: "My Orders", path: "/my-orders" });
+  }
 
   return (
     <nav className={`${styles.nav} d-flex justify-content-between align-items-center px-4 py-2`}>
       <div className={`${styles.logoo} d-flex align-items-center gap-4`}>
         <img className={styles.img} src={Logo} alt="logo" width="120" />
 
-        {userlogin && (
-          <ul className="d-flex list-unstyled m-0 gap-3">
-            {userLinks.map(link => (
-              <li key={link.name}>
-                <NavLink
-                  to={link.path}
-                  className={({ isActive }) =>
-                    isActive
-                      ? `${styles.active} text-decoration-none text-dark`
-                      : "text-decoration-none text-dark"
-                  }
-                >
-                  {link.name}
-                </NavLink>
-              </li>
-            ))}
-          </ul>
-        )}
+        <ul className="d-flex list-unstyled m-0 gap-3">
+          {userLinks.map(link => (
+            <li key={link.name}>
+              <NavLink
+                to={link.path}
+                className={({ isActive }) =>
+                  isActive
+                    ? `${styles.active} text-decoration-none text-dark`
+                    : "text-decoration-none text-dark"
+                }
+              >
+                {link.name}
+              </NavLink>
+            </li>
+          ))}
+        </ul>
       </div>
 
       <div>
         <ul className="d-flex gap-3 m-0 p-0">
           {!userlogin && (
-            <>
+            <div className='mt-4 d-flex gap-4'>
               <li>
-                <NavLink to="/login" className={`btn btn-success ${styles.login}`}>
+                <NavLink to="/login" className={`btn btn-success ${styles.login}  `}>
                   Login
                 </NavLink>
               </li>
@@ -61,11 +64,11 @@ export default function Navbar() {
                   Register
                 </NavLink>
               </li>
-            </>
+            </div>
           )}
           {userlogin && (
             <li>
-              <button onClick={logout} className={`btn btn-danger ${styles.logout}`}>
+              <button onClick={logout} className={`btn btn-danger ${styles.logout} `}>
                 Logout
               </button>
             </li>

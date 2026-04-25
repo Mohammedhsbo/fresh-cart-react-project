@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
+import apiClient from '../../lib/api';
 import React from 'react'
 // import { useEffect } from 'react'
 import Slider from "react-slick";
@@ -16,11 +16,10 @@ export default function Categoryslider() {
 
     async function getcategories()
     {
-         let {data} = await axios.get("https://ecommerce.routemisr.com/api/v1/categories");
+         let {data} = await apiClient.get("/categories");
          return data;
 
     }
-    console.log("category data"+data);
     
 
 
@@ -35,19 +34,7 @@ export default function Categoryslider() {
     autoplaySpeed: 1500,
     
   };
-    //   const[categories, setCategories]=React.useState([]);
-    // async function getcategories() {
-    //     try {
-    //          let {data} = await axios.get("https://ecommerce.routemisr.com/api/v1/categories");
-    //         //  console.log(data);
-    //          setCategories(data.data);
-    //     }
-    //     catch (error) {
-    //         console.log(error);
-    //     }}
-    //     useEffect(() => {
-    //         getcategories();
-    //     }, []); 
+    // Removed dead code
   return (
     <div>  
         {isError && <h3 className='text-danger'>Something went wrong</h3>}

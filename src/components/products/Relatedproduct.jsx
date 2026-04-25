@@ -1,4 +1,4 @@
-import axios from 'axios';
+import apiClient from '../../lib/api';
 import React from 'react';
 import { Link, useParams } from 'react-router-dom'; // ✅ لازم تستورده لأنك بتستخدم <Link>
  
@@ -8,8 +8,7 @@ export default function Relatedproduct({categoryName, currentId}) {
 
   async function getrelatedproducts() {
     try {
-      const { data } = await axios.get(`https://ecommerce.routemisr.com/api/v1/products `);
-      console.log(data.data);
+      const { data } = await apiClient.get(`/products`);
       const filterded=data.data.filter((p)=> p.category.name===categoryName && p._id!==currentId);
       setProducts(filterded);
     } catch (err) {
